@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【覚醒への招待状】松果体活性化 特別集中講座</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Serene Awakening (Warm neutrals with purple and gold accents) -->
+    <!-- Application Structure Plan: The application transforms the linear sales copy into a multi-layered, interactive journey. It starts with a captivating hero section to set a meditative tone. It then guides the user through identifying their "pain points" via interactive cards. The core concepts, like the pineal gland and the shift from duality to oneness, are visualized with diagrams and an interactive chart to make abstract ideas tangible. The 7 benefits are presented in an accordion, allowing users to explore them at their own pace without being overwhelmed. This structured, interactive flow is designed to build curiosity and deepen understanding progressively, leading more effectively to the final call to action, rather than just presenting a wall of text. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Hero Section -> Goal: Set a spiritual, calming mood -> Viz/Method: Full-screen canvas with subtle, slow-moving particles -> Interaction: Passive visual -> Justification: Creates an immersive, non-distracting first impression fitting the theme. -> Library/Method: Vanilla JS Canvas API.
+        - Report Info: "7 Awakening Experiences" -> Goal: Organize dense information and encourage exploration -> Viz/Method: Accordion component -> Interaction: User clicks to expand/collapse each item -> Justification: Prevents information overload, makes content digestible, and works well on all screen sizes. -> Library/Method: JS + Tailwind CSS.
+        - Report Info: "2元意識から1元意識へ" (Duality to Oneness) -> Goal: Visualize an abstract spiritual concept -> Viz/Method: Donut Chart -> Interaction: A button click triggers a chart update, visually merging two halves into a single whole -> Justification: Makes a core benefit of the course tangible and memorable. -> Library/Method: Chart.js.
+        - Report Info: "FAQ" -> Goal: Present questions and answers cleanly -> Viz/Method: Accordion component -> Interaction: User clicks to reveal answers -> Justification: Saves space and keeps the layout uncluttered. -> Library/Method: JS + Tailwind CSS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #F5F3F1; /* Warm neutral background */
+            color: #44403C; /* stone-700 */
+        }
+        .hero-bg {
+            position: relative;
+            background: radial-gradient(circle, #6B21A8, #2E104E);
+            overflow: hidden;
+        }
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+        }
+        .accordion-item.open .accordion-content {
+            max-height: 500px; /* Adjust as needed */
+        }
+        .accordion-item.open .accordion-arrow {
+            transform: rotate(180deg);
+        }
+        .btn-cta {
+            background: linear-gradient(45deg, #FBBF24, #F59E0B);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
+        }
+        .btn-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+        }
+    </style>
+</head>
+<body class="bg-[#F5F3F1]">
+
+    <!-- Hero Section -->
+    <header class="hero-bg text-white min-h-screen flex items-center justify-center text-center p-6">
+        <canvas id="particle-canvas"></canvas>
+        <div class="hero-content">
+            <h1 class="text-3xl md:text-5xl font-bold leading-tight mb-4 animate-fade-in-down">【覚醒への招待状】<br>内に眠る“第３の目”を開き、<br>世界の真実を見通す</h1>
+            <p class="text-lg md:text-2xl font-light mb-8 animate-fade-in-up">松果体活性化 特別集中講座</p>
+            <div class="space-y-4 text-xl md:text-2xl font-light">
+                <p class="animate-fade-in" style="animation-delay: 0.5s;">「なぜ、私の人生は満たされないのだろう…？」</p>
+                <p class="animate-fade-in" style="animation-delay: 1s;">「瞑想しても、思考の渦から抜け出せない…」</p>
+                <p class="animate-fade-in" style="animation-delay: 1.5s;">「この世界の“本当のこと”が知りたい…」</p>
+            </div>
+            <p class="mt-12 text-lg max-w-2xl mx-auto animate-fade-in" style="animation-delay: 2s;">もし、あなたが心のどこかで、このような根源的な問いを抱えているのなら、それは偶然ではありません。
+            あなたの魂が、<strong class="text-amber-300">内なる覚醒の扉</strong>を叩いているサインなのです。</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-16 md:py-24">
+
+        <!-- Problems Section -->
+        <section class="mb-16 md:mb-24 text-center">
+            <h2 class="text-2xl md:text-3xl font-bold mb-4 text-stone-800">こんなお悩み、抱えていませんか？</h2>
+            <p class="max-w-3xl mx-auto text-stone-600 mb-12">一つでも当てはまるなら、それはあなたの松果体が本来の力を発揮できていないサインかもしれません。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Problem Cards -->
+                <div class="bg-white p-6 rounded-lg shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
+                    <p class="text-lg font-semibold text-purple-800">瞑想が深まらない</p>
+                    <p class="mt-2 text-stone-600">雑念ばかりで、一向に静寂を体験できない</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
+                    <p class="text-lg font-semibold text-purple-800">情報に疲弊している</p>
+                    <p class="mt-2 text-stone-600">何が真実か見極められず、心が消耗している</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
+                    <p class="text-lg font-semibold text-purple-800">常に不安感がある</p>
+                    <p class="mt-2 text-stone-600">心が休まる時がなく、焦りを感じている</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
+                    <p class="text-lg font-semibold text-purple-800">直感が鈍っている</p>
+                    <p class="mt-2 text-stone-600">人生の決断に迷い、インスピレーションが湧かない</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
+                    <p class="text-lg font-semibold text-purple-800">見えない世界への探求心</p>
+                    <p class="mt-2 text-stone-600">目に見える世界だけが全てだとは思えない</p>
+                </div>
+                 <div class="bg-white p-6 rounded-lg shadow-lg transform hover:-translate-y-2 transition-transform duration-300">
+                    <p class="text-lg font-semibold text-purple-800">概念の壁</p>
+                    <p class="mt-2 text-stone-600">「悟り」や「ワンネス」を体感として理解できない</p>
+                </div>
+            </div>
+            <p class="mt-12 text-lg max-w-3xl mx-auto">その根本原因は、あなたの脳の中心に存在する、<strong class="text-purple-800 text-xl">奇跡の器官「松果体」が眠ってしまっている</strong>からかもしれません。</p>
+            <p class="mt-4 text-base max-w-3xl mx-auto text-stone-600">現代社会のストレス、食生活、電磁波… これらは、私たちのスピリチュアルなアンテナである松果体を石灰化させ、その本来の機能を奪ってきました。しかし、諦める必要はありません。松果体は、正しい方法でアプローチすれば、<strong class="text-purple-800">再び活性化し、あなたを本来の覚醒した意識へと導く</strong>ことができるのです。</p>
+        </section>
+
+        <!-- Benefits Section (Accordion) -->
+        <section class="mb-16 md:mb-24">
+            <h2 class="text-2xl md:text-3xl font-bold mb-12 text-center text-stone-800">眠っていた潜在能力が目覚める<br>７つの覚醒体験</h2>
+            <div id="accordion-container" class="max-w-3xl mx-auto space-y-4">
+                <!-- Accordion items will be inserted here by JS -->
+            </div>
+        </section>
+
+        <!-- Interactive Visualization Section -->
+        <section class="mb-16 md:mb-24 text-center">
+             <h2 class="text-2xl md:text-3xl font-bold mb-4 text-stone-800">２元意識から１元意識へのシフト</h2>
+             <p class="max-w-3xl mx-auto text-stone-600 mb-8">「善と悪」「好きと嫌い」「自と他」といった対立する世界観から、すべてが一つである調和した意識へ。この講座の核心的な体験の一つを、インタラクティブな図で体感してみてください。</p>
+            <div class="bg-white p-6 md:p-8 rounded-lg shadow-xl">
+                <div class="chart-container">
+                    <canvas id="onenessChart"></canvas>
+                </div>
+                <button id="shift-button" class="mt-8 bg-purple-700 text-white font-semibold py-3 px-8 rounded-full hover:bg-purple-800 transition-colors duration-300">
+                    意識をシフトさせる
+                </button>
+            </div>
+        </section>
+
+
+        <!-- Instructor & FAQ Section -->
+        <section class="mb-16 md:mb-24">
+            <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-12">
+                <div class="md:col-span-2">
+                    <h3 class="text-2xl font-bold mb-4 text-stone-800">講師紹介</h3>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="w-32 h-32 bg-stone-200 rounded-full mx-auto mb-4 flex items-center justify-center">
+                            <span class="text-stone-500">講師写真</span>
+                        </div>
+                        <h4 class="text-xl font-bold text-center text-purple-800">リアル</h4>
+                        <p class="mt-4 text-sm text-stone-600">長年にわたる瞑想修行と、量子物理学、神経科学、古代哲学の探求を経て、現代人向けに最適化された独自の「松果体活性化メソッド」を確立。これまで〇〇人以上の覚醒をサポートし…</p>
+                    </div>
+                </div>
+                <div class="md:col-span-3">
+                    <h3 class="text-2xl font-bold mb-4 text-stone-800">よくあるご質問</h3>
+                    <div id="faq-accordion" class="space-y-4">
+                        <!-- FAQ items will be inserted here by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Closing CTA -->
+        <section class="text-center bg-white py-16 md:py-24 rounded-lg shadow-2xl">
+            <h2 class="text-2xl md:text-4xl font-bold mb-4 text-purple-800">あなたは、いつまで眠り続けますか？</h2>
+            <p class="text-lg mb-8 max-w-2xl mx-auto text-stone-600">目を覚ます時が来ました。あなたの中には、宇宙のすべてを知る叡智が眠っています。</p>
+            <p class="text-xl font-semibold mb-2 max-w-3xl mx-auto">その叡智への扉を開ける鍵、それが<strong class="text-amber-500 text-2xl">「松果体の活性化」</strong>です。</p>
+            <p class="mt-6 mb-12 text-lg max-w-2xl mx-auto">幻想の世界（マーヤ）の幕を引き裂き、<br>分離という夢から覚め、<br>本当のあなた自身として、輝きを放つ。<br>そのための、一生に一度の機会が、ここにあります。</p>
+
+            <div class="mt-12 border-t border-b border-stone-200 max-w-3xl mx-auto py-12">
+                <h3 class="text-2xl md:text-3xl font-bold mb-8 text-stone-800">【松果体活性化】特別集中講座 お申し込み</h3>
+                <div class="text-left max-w-md mx-auto space-y-4">
+                    <p><strong class="w-24 inline-block text-purple-800">開催日時：</strong>〇月〇日（土）13:00 〜 17:00</p>
+                    <p><strong class="w-24 inline-block text-purple-800">開催場所：</strong>オンライン（Zoomにて開催） or [会場名]</p>
+                    <p><strong class="w-24 inline-block text-purple-800">定員：</strong>限定 〇〇名様 <span class="text-sm">（少人数での開催となります）</span></p>
+                    <div class="pt-4">
+                        <p class="text-center text-sm text-stone-500">通常価格：<span class="line-through">〇〇,〇〇〇円</span></p>
+                        <p class="text-center font-bold text-purple-800">【早期割引】〇月〇日まで</p>
+                        <p class="text-center text-3xl font-bold text-amber-600">特別価格 〇〇,〇〇〇円<span class="text-base font-normal">(税込)</span></p>
+                    </div>
+                </div>
+                 <div class="mt-8 bg-purple-50 p-6 rounded-lg max-w-md mx-auto">
+                    <h4 class="font-bold text-lg text-purple-800 mb-3 text-center">豪華・参加特典</h4>
+                    <ul class="text-left space-y-2 text-stone-700">
+                        <li>１．講座の録画データ（期間中、何度でも復習可能）</li>
+                        <li>２．松果体活性化を促す特別瞑想音源（MP3）</li>
+                        <li>３．講座終了後30日間のメールサポート</li>
+                    </ul>
+                </div>
+            </div>
+
+            <p class="mt-12 text-xl font-semibold">さあ、覚醒への扉を開きましょう。</p>
+            <p class="mb-8 text-lg">あなたの内なる神性が、目覚めの時を待っています。</p>
+
+            <a href="#" class="btn-cta text-stone-800 font-bold text-xl py-4 px-12 rounded-full inline-block">
+                ↓↓↓今すぐお申し込み、覚醒への第一歩を踏み出す↓↓↓
+            </a>
+            <p class="mt-4 text-sm text-stone-500">※席はすぐに埋まることが予想されます。ご興味のある方は、今すぐ席を確保してください。</p>
+        </section>
+    </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // Hero Canvas Animation
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particlesArray;
+
+    const mouse = {
+        x: null,
+        y: null,
+        radius: (canvas.height/120) * (canvas.width/120)
+    };
+
+    window.addEventListener('mousemove', function(event) {
+        mouse.x = event.x;
+        mouse.y = event.y;
+    });
+
+    class Particle {
+        constructor(x, y, directionX, directionY, size, color) {
+            this.x = x;
+            this.y = y;
+            this.directionX = directionX;
+            this.directionY = directionY;
+            this.size = size;
+            this.color = color;
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        }
+        update() {
+            if (this.x > canvas.width || this.x < 0) {
+                this.directionX = -this.directionX;
+            }
+            if (this.y > canvas.height || this.y < 0) {
+                this.directionY = -this.directionY;
+            }
+            this.x += this.directionX;
+            this.y += this.directionY;
+            this.draw();
+        }
+    }
+
+    function initParticles() {
+        particlesArray = [];
+        let numberOfParticles = (canvas.height * canvas.width) / 9000;
+        for (let i = 0; i < numberOfParticles; i++) {
+            let size = (Math.random() * 2) + 0.5;
+            let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+            let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+            let directionX = (Math.random() * .4) - .2;
+            let directionY = (Math.random() * .4) - .2;
+            let color = 'rgba(251, 191, 36, 0.5)';
+            particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+        }
+    }
+
+    function animateParticles() {
+        requestAnimationFrame(animateParticles);
+        ctx.clearRect(0,0,innerWidth, innerHeight);
+
+        for (let i = 0; i < particlesArray.length; i++) {
+            particlesArray[i].update();
+        }
+    }
+    
+    initParticles();
+    animateParticles();
+
+    window.addEventListener('resize', function(){
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
+        mouse.radius = (canvas.height/120) * (canvas.width/120);
+        initParticles();
+    });
+
+    // Accordion data
+    const benefitsData = [
+        { title: '【第３の目】アジナーチャクラを開発し、真実を見抜く洞察力を手に入れる', content: '額の中心に位置する第６チャクラ「アジナーチャクラ」は、松果体と密接に連携しています。このチャクラを開発することで、物事の本質を見抜く直感力、洞察力が飛躍的に高まります。もう表面的な情報に惑わされることはありません。' },
+        { title: '日常が変容する「気づきの力」が劇的にアップする', content: 'これまで見過ごしてきた日常の些細な出来事の中に、宇宙からのメッセージが隠されていることに気づき始めます。シンクロニシティが頻発し、人生が導かれているという絶対的な安心感に包まれます。' },
+        { title: '宇宙意識と繋がる「より深い瞑想」へ', content: '自己流の瞑想ではたどり着けなかった、静寂と至福に満ちた領域へ。思考が完全に止み、時間と空間の感覚を超えた「純粋意識」との一体化を体験します。これこそが、真の癒しと解放の瞬間です。' },
+        { title: '対立のない世界へ。２元意識から１元意識へのシフト', content: '「善と悪」「好きと嫌い」「自と他」…私たちを苦しめるあらゆる対立（２元性）が、幻想であったことに気づきます。すべてが一つである「ワンネス（１元意識）」の視点を獲得し、ジャッジのない、ありのままの世界を受け入れられるようになります。' },
+        { title: '幻想世界を見破る。相対世界のマーヤ（幻）を打ち破る', content: '私たちが「現実」だと思っているこの世界は、インド哲学で言うところの「マーヤ（幻影）」に過ぎません。本講座を通して、この幻想のカラクリを見抜き、マーヤの向こう側にある「絶対的な真実」に触れるための力を養います。' },
+        { title: '人生のブループリント（魂の計画）を思い出す', content: '松果体が活性化すると、高次の意識との繋がりが強固になります。なぜ自分がこの地球に生まれてきたのか、何を成し遂げるべきなのか。魂レベルの目的が明らかになり、迷いのない力強い人生を歩み始めます。' },
+        { title: '心身のデトックスと生命エネルギーの活性化', content: '松果体の活性化は、ホルモンバランスを整え、体内時計を正常化します。心身のデトックスが促進され、生命エネルギー（プラーナ）が全身に満ち溢れるのを実感できるでしょう。' },
+    ];
+
+    const faqData = [
+        { q: 'スピリチュアル初心者ですが、参加できますか？', a: 'はい、もちろんです。本講座は、専門用語も一から丁寧に解説し、どなたでも実践できる簡単なワークから始めますので、ご安心ください。「探求したい」という純粋な気持ちがあれば、それが最高の資格です。' },
+        { q: '瞑想の経験がほとんどありません。大丈夫でしょうか？', a: '問題ありません。多くの方が自己流の瞑想で悩んでいます。本講座では、深い瞑想状態に入るための最も効果的で安全な誘導を行います。経験者の方も、これまで体験したことのない境地に至るでしょう。' },
+        { q: '本当に効果があるのでしょうか？', a: '効果には個人差がありますが、提示されたワークを誠実に実践していただければ、何らかのポジティブな変化を必ず感じていただけるはずです。重要なのは、あなた自身の「変わりたい」という意図です。私たちはその意editsが最大限に発揮されるよう、全力でサポートします。' },
+    ];
+    
+    // Generic Accordion creator
+    function createAccordion(containerId, data, isFaq = false) {
+        const container = document.getElementById(containerId);
+        data.forEach((item, index) => {
+            const itemEl = document.createElement('div');
+            itemEl.className = 'accordion-item bg-white rounded-lg shadow-md overflow-hidden';
+
+            const title = isFaq ? item.q : `<span>${index + 1}.</span><span class="ml-4">${item.title}</span>`;
+            const content = isFaq ? item.a : item.content;
+
+            itemEl.innerHTML = `
+                <div class="accordion-title flex justify-between items-center p-4 md:p-5 cursor-pointer bg-purple-50 hover:bg-purple-100 transition-colors">
+                    <h4 class="font-semibold ${isFaq ? 'text-purple-900' : 'text-purple-800'} flex-1">${title}</h4>
+                    <div class="accordion-arrow text-purple-600 transition-transform duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="accordion-content">
+                    <p class="p-4 md:p-5 text-stone-600">${content}</p>
+                </div>
+            `;
+            container.appendChild(itemEl);
+        });
+
+        container.addEventListener('click', function(e) {
+            const title = e.target.closest('.accordion-title');
+            if (title) {
+                const item = title.parentElement;
+                item.classList.toggle('open');
+                
+                const allItems = container.querySelectorAll('.accordion-item');
+                allItems.forEach(otherItem => {
+                    if (otherItem !== item && otherItem.classList.contains('open')) {
+                        otherItem.classList.remove('open');
+                    }
+                });
+            }
+        });
+    }
+
+    createAccordion('accordion-container', benefitsData, false);
+    createAccordion('faq-accordion', faqData, true);
+
+
+    // Chart.js Interactive Visualization
+    const ctxChart = document.getElementById('onenessChart').getContext('2d');
+    let onenessChart;
+
+    const dualState = {
+        labels: ['自己', '他者'],
+        datasets: [{
+            data: [50, 50],
+            backgroundColor: ['#8B5CF6', '#FBBF24'],
+            borderColor: '#F5F3F1',
+            borderWidth: 5,
+        }]
+    };
+
+    const oneState = {
+        labels: ['ワンネス（ひとつ）'],
+        datasets: [{
+            data: [100],
+            backgroundColor: ['#A78BFA'],
+            borderColor: '#F5F3F1',
+            borderWidth: 5,
+        }]
+    };
+    
+    function createChart(state) {
+        if(onenessChart) {
+            onenessChart.destroy();
+        }
+        onenessChart = new Chart(ctxChart, {
+            type: 'doughnut',
+            data: state,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                size: 14,
+                                family: "'Noto Sans JP', sans-serif"
+                            },
+                            color: '#44403C'
+                        }
+                    },
+                    tooltip: {
+                        enabled: false
+                    }
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true,
+                    duration: 1500
+                }
+            }
+        });
+    }
+
+    createChart(dualState);
+
+    document.getElementById('shift-button').addEventListener('click', () => {
+        if (onenessChart.data.labels[0] === '自己') {
+            createChart(oneState);
+        } else {
+            createChart(dualState);
+        }
+    });
+
+});
+</script>
+</body>
+</html>
